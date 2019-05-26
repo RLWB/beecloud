@@ -31,11 +31,6 @@
           <div class="btn" v-else>登录</div>
       </div>
       <loading :loading="loading"></loading>
-      <transition name="shooting-star">
-        <ul>
-            <li v-for="item in items[0]" :key="items[0].indexOf(item)">{{item.name}}</li>
-        </ul>
-      </transition>
   </div>
 </template>
 
@@ -56,15 +51,7 @@ export default {
             eyeStatus: false,
             phoneList: [],
             hideList: false,
-            loading: false,
-            items:  [[
-                {
-                    name: 123
-                },
-                {
-                    name: 223
-                }
-            ]]
+            loading: false
         }
     },
     watch:{
@@ -161,16 +148,6 @@ export default {
     },
     mounted() {
         this.phoneList = localStorage.getItem('phoneList')?JSON.parse(localStorage.getItem('phoneList')):[]
-        // setTimeout(()=>{
-        //     this.items = [[
-        //         {
-        //             name: 123
-        //         },
-        //         {
-        //             name: 223
-        //         }
-        //     ]]
-        // }, 3000)
     },
 }
 
