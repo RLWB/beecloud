@@ -1,6 +1,6 @@
 <template>
   <div class="nav-bar">
-      <img :src="src" alt="">
+      <img :src="src" :class="[{'dark': dark()}]" alt="">
       {{title}}
   </div>
 </template>
@@ -14,20 +14,28 @@ export default {
     },
     props: [
        'title' 
-    ]
+    ],
+    methods: {
+        dark() {
+            return 'dark'
+        }
+    }
 
 }
 
 </script>
 <style scoped lang="scss">
 .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    background: #fff;
     height: 0.435rem;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.18rem;
     color: #030303;
-    position: relative;
     img {
         width: 0.18rem;
         height: 0.18rem;
