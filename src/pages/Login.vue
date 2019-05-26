@@ -31,6 +31,11 @@
           <div class="btn" v-else>登录</div>
       </div>
       <loading :loading="loading"></loading>
+      <transition name="shooting-star">
+        <ul>
+            <li v-for="item in items[0]" :key="items[0].indexOf(item)">{{item.name}}</li>
+        </ul>
+      </transition>
   </div>
 </template>
 
@@ -51,7 +56,15 @@ export default {
             eyeStatus: false,
             phoneList: [],
             hideList: false,
-            loading: false
+            loading: false,
+            items:  [[
+                {
+                    name: 123
+                },
+                {
+                    name: 223
+                }
+            ]]
         }
     },
     watch:{
@@ -148,6 +161,16 @@ export default {
     },
     mounted() {
         this.phoneList = localStorage.getItem('phoneList')?JSON.parse(localStorage.getItem('phoneList')):[]
+        // setTimeout(()=>{
+        //     this.items = [[
+        //         {
+        //             name: 123
+        //         },
+        //         {
+        //             name: 223
+        //         }
+        //     ]]
+        // }, 3000)
     },
 }
 
@@ -254,5 +277,12 @@ export default {
     .default {
         background: rgba(221,51,51,1);
     }
+}
+.shooting-star-leave-to, .shooting-star-enter {
+    transform: translateX(150px) rotate(30deg);
+    opacity: 0
+}
+.shooting-star-enter-active, .shooting-star-leave-active {
+    transition: all 0.5s ease;
 }
 </style>
