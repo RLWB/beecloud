@@ -8,6 +8,7 @@ import loading from '@/common/loading'
 
 Vue.config.productionTip = false
 Vue.component('loading', loading)
+// Vue.use(loading)
 
 /* eslint-disable no-new */
 new Vue({
