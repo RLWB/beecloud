@@ -5,9 +5,11 @@ import App from './App'
 import router from './router'
 import 'reset-css'
 import loading from '@/common/loading'
+// import { Indicator } from 'mint-ui'
 
 Vue.config.productionTip = false
 Vue.component('loading', loading)
+// Vue.use(Indicator)
 
 /* eslint-disable no-new */
 new Vue({

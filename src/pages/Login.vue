@@ -37,6 +37,7 @@
 <script>
 import NavBar from '../components/NavBar'
 import axios from 'axios'
+import { login } from '@/api/api'
 export default {
     components:{
         NavBar: NavBar
@@ -104,22 +105,29 @@ export default {
             }else if(this.password.length<8) {
                 alert('密码格式错误')
             }else {
-                this.loading = true
-                axios.post('https://web-gateway.newbeescm.com/b2b-app-web/user/login',{}, {
-                    params: {
-                        loginName: this.phone,
-                        password: this.password
-                    }
+                // this.loading = true
+                // axios.post('https://web-gateway.newbeescm.com/b2b-app-web/user/login',{}, {
+                //     params: {
+                //         loginName: this.phone,
+                //         password: this.password
+                //     }
+                // })
+                // .then( res => {
+                //     this.loading = false
+                //     if(res.data.status.statusCode === 0) {
+                //         this.changePhoneList()
+                //         alert('登陆成功')
+                //     }
+                // })
+                // .catch(err => {
+                //     this.loading = false
+                // })
+                login({
+                    loginName: this.phone,
+                    password: this.password
                 })
                 .then( res => {
-                    if(res.data.status.statusCode === 0) {
-                        this.loading = false
-                        this.changePhoneList()
-                        alert('登陆成功')
-                    }
-                })
-                .catch(err => {
-                    this.loading = false
+                    console.log(res)
                 })
             }
         },
