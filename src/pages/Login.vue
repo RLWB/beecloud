@@ -1,22 +1,22 @@
 <template>
   <div class="login">
-      <nav-bar :title='title'></nav-bar>
+      <nav-bar :title='title' :back="true"></nav-bar>
       <div class="logo-wrap">
           <img src="../assets/img/ic_logo.png" alt="">
       </div>
       <div class="content">
           <ul class="content-list">
               <li class="content-item">
-                 <img v-if="phone.length<=0" class="item-icon" src="../assets/img/ic_phone.png" alt=""> 
-                 <img v-else class="item-icon" src="../assets/img/ic_phone_red.png" alt=""> 
+                 <img v-if="phone.length<=0" class="item-icon" src="../assets/img/ic_phone.png" alt="">
+                 <img v-else class="item-icon" src="../assets/img/ic_phone_red.png" alt="">
                  <input type="text" placeholder="手机号码" v-model="phone" @focus="focusChangeClearStatus('phone','phoneClear')" @blur="blurChangeClearStatus('phoneClear')">
                  <img :style="{'visibility': phoneClear ? 'visible' : 'hidden'}" class="item-clear" src="../assets/img/ic_clear.png" alt="" @touchstart="clearInput('phone')">
                  <img class="item-last" src="../assets/img/ic-down-arr.png" alt=""  v-if="phoneList.length>0" @click="showOrHide">
               </li>
-               
+
               <li class="content-item">
-                 <img v-if="password.length<=0" class="item-icon item-lock" src="../assets/img/ic_lock.png" alt=""> 
-                 <img v-else class="item-icon item-lock" src="../assets/img/ic_lock_red.png" alt=""> 
+                 <img v-if="password.length<=0" class="item-icon item-lock" src="../assets/img/ic_lock.png" alt="">
+                 <img v-else class="item-icon item-lock" src="../assets/img/ic_lock_red.png" alt="">
                  <input v-bind="{type:!eyeStatus?'password': 'text' }" placeholder="请输入密码" v-model="password" @focus="focusChangeClearStatus('password','passwordClear')" @blur="blurChangeClearStatus('passwordClear')">
                  <img :style="{'visibility': passwordClear ? 'visible' : 'hidden'}" class="item-clear" src="../assets/img/ic_clear.png" alt="" @touchstart="clearInput('password')">
                  <img class="item-last" v-bind="{src: !eyeStatus ? require('../assets/img/ic_eye_close.png'):require('../assets/img/ic_eye_open.png')}" alt="" @click="changeEyes">
@@ -30,7 +30,6 @@
           <div class="btn default" v-if="phone.length>0&&password.length>0" @click='logIn'>登录</div>
           <div class="btn" v-else>登录</div>
       </div>
-      <loading :loading="loading"></loading>
   </div>
 </template>
 
@@ -38,6 +37,8 @@
 import NavBar from '../components/NavBar'
 import axios from 'axios'
 import { login } from '@/api/api'
+import { Toast } from 'mint-ui'
+import { mapMutations } from 'vuex'
 export default {
     components:{
         NavBar: NavBar
@@ -88,7 +89,7 @@ export default {
             }else {
                 this[clear] = false;
             }
-            
+
         },
         clearInput(val) {
             this[val] = ''
@@ -99,6 +100,10 @@ export default {
         showOrHide() {
             this.hideList = !this.hideList
         },
+        ...mapMutations([
+          'setToken',
+          'setUser'
+        ]),
         logIn() {
             if(!(/^1[123456789]\d{9}$/.test(this.phone))) {
                 alert('手机号格式错误')
@@ -127,7 +132,15 @@ export default {
                     password: this.password
                 })
                 .then( res => {
-                    console.log(res)
+                if(res.data.status.statusCode === 0) {
+                    Toast('登录成功')
+                    this.changePhoneList();
+                    this.setToken(res.data.result.token)
+                    this.setUser(res.data.result)
+                    this.$store.commit('users/setName','rui')
+                  }else {
+                    Toast(res.data.status.statusReason)
+                  }
                 })
             }
         },
@@ -144,7 +157,7 @@ export default {
             })
            if(this.phoneList.length > 10) {
                this.phoneList.splice(10, this.phoneList.length - 10)
-           } 
+           }
            localStorage.setItem('phoneList', JSON.stringify(this.phoneList))
         },
         choosePhone(num) {

@@ -1,6 +1,6 @@
 <template>
   <div class="nav-bar">
-      <img :src="src" :class="[{'dark': dark()}]" alt="">
+      <img v-if="!back" :src="src" :class="[{'dark': dark()}]" alt="">
       {{title}}
   </div>
 </template>
@@ -13,7 +13,8 @@ export default {
         }
     },
     props: [
-       'title' 
+       'title',
+       'back'
     ],
     methods: {
         dark() {

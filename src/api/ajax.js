@@ -1,5 +1,5 @@
 import axios from 'axios'
-import store from '@/store/store'
+import store from '@/store'
 import { Indicator } from 'mint-ui';
 
 const service = axios.create({
@@ -24,6 +24,7 @@ service.interceptors.response.use(
     response => {
         Indicator.close();
         console.log(response)
+        return response;
     }
 )
 
